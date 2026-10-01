@@ -1460,3 +1460,79 @@ body{font-family:var(--sans);letter-spacing:-.01em}
   .catalogCategoryBar{margin-bottom:18px}
   .catalogGrid{gap:28px 10px}
 }
+
+
+/* Final density pass */
+.heroCinematic{
+  min-height:700px;
+  padding-top:58px;
+  padding-bottom:78px;
+  gap:46px;
+}
+.heroTopline{margin-bottom:28px}
+.heroLowerGrid{margin-top:34px}
+.heroProofCinematic{margin-top:24px}
+.cinematicStage{min-height:560px}
+.typeStage{
+  padding-top:82px;
+  padding-bottom:88px;
+}
+.typeStageMain{min-height:400px}
+.shop{
+  padding-top:82px;
+  padding-bottom:92px;
+}
+.premiumHead{margin-bottom:34px}
+.catalogCategoryBar{
+  margin-bottom:16px;
+  gap:0;
+}
+.catalogCategoryBar button{
+  min-height:46px;
+  padding-inline:16px;
+}
+.catalogToolbar{
+  min-height:48px;
+  margin-bottom:22px;
+}
+.catalogLayout{gap:32px}
+.catalogGrid{gap:30px 18px}
+.catalogSidebar>button{min-height:42px}
+.sidebarNote{margin-top:18px;padding:14px}
+.editorialBreak{
+  min-height:auto;
+  padding-top:88px;
+  padding-bottom:88px;
+}
+.editorialCopy h2{margin-bottom:20px}
+.serviceGrid{min-height:120px}
+.serviceItem{padding-top:24px;padding-bottom:24px}
+.manifesto{
+  padding-top:88px;
+  padding-bottom:92px;
+}
+.manifesto h2{margin:30px 0}
+.footer{padding-top:30px;padding-bottom:30px}
+.headerCategoryRow{min-height:42px}
+.categoryRail{gap:22px}
+.marquee{padding-block:10px}
+
+@media(max-width:820px){
+  .heroCinematic{padding-top:52px;padding-bottom:64px}
+  .cinematicStage{min-height:520px}
+  .typeStage{padding-top:68px;padding-bottom:72px}
+  .typeStageMain{min-height:340px}
+  .shop{padding-top:68px;padding-bottom:76px}
+  .editorialBreak{padding-top:72px;padding-bottom:72px}
+  .manifesto{padding-top:72px;padding-bottom:76px}
+}
+@media(max-width:560px){
+  .heroCinematic{padding-top:42px;padding-bottom:54px}
+  .cinematicStage{min-height:420px}
+  .typeStage{padding-top:58px;padding-bottom:62px}
+  .shop{padding-top:58px;padding-bottom:66px}
+  .premiumHead{margin-bottom:24px}
+  .catalogGrid{gap:22px 10px}
+  .editorialBreak{padding-top:60px;padding-bottom:60px}
+  .manifesto{padding-top:60px;padding-bottom:64px}
+}

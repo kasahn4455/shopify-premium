@@ -1,9 +1,10 @@
 export const dynamic = "force-dynamic";
 
-import { ArrowRight, BadgeCheck, Headphones, RotateCcw, ShieldCheck, Truck } from "lucide-react";
+import Image from "next/image";
+import { ArrowRight, Headphones, RotateCcw, ShieldCheck, Truck } from "lucide-react";
 import PremiumHero from "@/components/PremiumHero";
 import PremiumHeader from "@/components/PremiumHeader";
-import CatalogExperience from "@/components/CatalogExperience";
+import TiltProductCard from "@/components/TiltProductCard";
 import { getProducts, type Product } from "@/lib/shopify";
 
 const storeName = "MRK Ventures";
@@ -17,6 +18,36 @@ function money(product: Product) {
   }).format(Number(variant.price.amount));
 }
 
+function searchText(product: Product) {
+  return [product.title, product.description, product.productType, product.vendor].filter(Boolean).join(" ").toLowerCase();
+}
+
+function findBy(products: Product[], terms: string[], fallback: number) {
+  return products.find(product => terms.some(term => searchText(product).includes(term))) || products[fallback] || products[0];
+}
+
+function ProductRow({ products }: { products: Product[] }) {
+  return (
+    <div className="kismaProductGrid">
+      {products.map((product, index) => {
+        const variant = product.variants.edges[0]?.node;
+        return (
+          <TiltProductCard
+            key={product.id}
+            index={index}
+            handle={product.handle}
+            title={product.title}
+            image={product.featuredImage?.url}
+            alt={product.featuredImage?.altText}
+            price={variant ? money(product) : undefined}
+            available={Boolean(variant?.availableForSale)}
+          />
+        );
+      })}
+    </div>
+  );
+}
+
 export default async function Home() {
   let products: Product[] = [];
   let setupError = false;
@@ -27,135 +58,125 @@ export default async function Home() {
     setupError = true;
   }
 
-  const heroProducts = products.slice(0, 2).map(product => ({
+  const heroProducts = products.slice(0, 3).map(product => ({
     title: product.title,
     image: product.featuredImage?.url,
     price: money(product),
     handle: product.handle
   }));
 
+  const categories = [
+    { title: "Home & Living", terms: ["home","lamp","clock","decor","plant","household"] },
+    { title: "Tech & Accessories", terms: ["usb","phone","charger","fan","tech"] },
+    { title: "Car Accessories", terms: ["car","vacuum","dashboard","mount"] },
+    { title: "Everyday Essentials", terms: ["soap","bottle","clean","travel","everyday"] }
+  ].map((category, index) => ({
+    ...category,
+    product: findBy(products, category.terms, index)
+  }));
+
+  const featured = products.slice(0, 10);
+  const newArrivals = products.slice(10, 20).length ? products.slice(10, 20) : products.slice(0, 10);
+  const promo = findBy(products, ["car","vacuum","travel","portable"], 4);
+
   return (
-    <main>
-      <div className="announcement">
-        <span>Complimentary UK delivery on qualifying orders</span>
-        <span className="announcementDot">•</span>
-        <span>Secure checkout powered by Shopify</span>
+    <main className="kismaInspired">
+      <div className="kismaAnnouncement">
+        Secure Shopify checkout <span>·</span> UK delivery options <span>·</span> Simple returns
       </div>
 
       <PremiumHeader storeName={storeName} />
-
       <PremiumHero products={heroProducts} />
 
-      <section className="marquee" aria-label="MRK Ventures values">
-        <div className="marqueeTrack">
-          <span>CURATED UTILITY</span><i>◆</i>
-          <span>MODERN FORM</span><i>◆</i>
-          <span>EVERYDAY FUNCTION</span><i>◆</i>
-          <span>CONSIDERED QUALITY</span><i>◆</i>
-          <span>CURATED UTILITY</span><i>◆</i>
-          <span>MODERN FORM</span><i>◆</i>
-          <span>EVERYDAY FUNCTION</span><i>◆</i>
-          <span>CONSIDERED QUALITY</span><i>◆</i>
+      <section className="kismaCategories shell" id="categories">
+        <div className="kismaSectionHead">
+          <h2>Shop by category</h2>
+          <a href="#shop">All products <ArrowRight size={14}/></a>
+        </div>
+
+        <div className="kismaCategoryGrid">
+          {categories.map((category, index) => (
+            <a href="#shop" className="kismaCategoryCard" key={category.title}>
+              <div className="kismaCategoryImage">
+                {category.product?.featuredImage ? (
+                  <Image
+                    src={category.product.featuredImage.url}
+                    alt={category.product.featuredImage.altText || category.title}
+                    fill
+                    sizes="(max-width: 760px) 70vw, 25vw"
+                  />
+                ) : <div className="imageFallback">MRK</div>}
+                <span className="kismaCategoryIndex">0{index + 1}</span>
+              </div>
+              <div className="kismaCategoryMeta">
+                <span>{category.title}</span>
+                <ArrowRight size={14}/>
+              </div>
+            </a>
+          ))}
         </div>
       </section>
 
-      <section className="standardStrip shell" aria-label="MRK Ventures shopping standard">
-        <div>
-          <span className="eyebrow">THE MRK STANDARD</span>
-          <strong>Useful products, clearly chosen.</strong>
-        </div>
-        <div><span>01</span><p>Curated range<br/><small>Less clutter, easier choices.</small></p></div>
-        <div><span>02</span><p>Secure checkout<br/><small>Shopify-powered payments.</small></p></div>
-        <div><span>03</span><p>UK delivery<br/><small>Tracked fulfilment updates.</small></p></div>
-      </section>
-
-      <section className="shop shell" id="shop">
-        <div className="sectionHead premiumHead">
-          <div>
-            <span className="eyebrow">THE EDIT</span>
-            <h2>Everything useful. Nothing unnecessary.</h2>
-          </div>
-          <div className="sectionIntro">
-            <p>Browse practical everyday products across home, kitchen, car, travel, tech and gifts — organised to help you find what you need quickly.</p>
-            <span>{String(products.length).padStart(2, "0")} PRODUCTS</span>
-          </div>
+      <section className="kismaProducts shell" id="shop">
+        <div className="kismaSectionHead">
+          <h2>Shop all products</h2>
+          <span>{products.length} products</span>
         </div>
 
         {setupError ? (
           <div className="setupCard">
-            <span className="eyebrow">STORE CONNECTION</span>
-            <strong>Shopify products are temporarily unavailable.</strong>
-            <p>The storefront itself is live. Product inventory will appear automatically when the Shopify public catalogue is reachable.</p>
+            <strong>Products are temporarily unavailable.</strong>
+            <p>The storefront is live and inventory will return automatically when Shopify reconnects.</p>
           </div>
         ) : (
-          <CatalogExperience products={products} />
+          <ProductRow products={featured} />
         )}
       </section>
 
-      <section className="editorialBreak shell" id="story">
-        <div className="editorialNumber">01</div>
-        <div className="editorialCopy">
-          <span className="eyebrow">OUR STANDARD</span>
-          <h2>Practical first.<br/><em>Chosen with care.</em></h2>
-          <p>
-            We focus on useful products that solve everyday problems, feel easy to use and offer clear value.
-          </p>
+      {promo?.featuredImage && (
+        <section className="kismaPromo shell">
+          <div className="kismaPromoImage">
+            <Image
+              src={promo.featuredImage.url}
+              alt={promo.featuredImage.altText || promo.title}
+              fill
+              sizes="100vw"
+            />
+            <div className="kismaPromoOverlay"/>
+            <div className="kismaPromoCopy">
+              <span>MRK EDIT / EVERYDAY UTILITY</span>
+              <h2>Useful products, thoughtfully selected.</h2>
+              <a href={"/products/" + promo.handle}>Explore the product <ArrowRight size={15}/></a>
+            </div>
+          </div>
+        </section>
+      )}
+
+      <section className="kismaProducts shell" id="new">
+        <div className="kismaSectionHead">
+          <h2>New arrivals</h2>
+          <a href="#shop">View all <ArrowRight size={14}/></a>
         </div>
-        <div className="editorialSculpture" aria-hidden="true">
-          <div className="sculptureRing ringA"/>
-          <div className="sculptureRing ringB"/>
-          <div className="sculptureCore">MRK</div>
+        {!setupError && <ProductRow products={newArrivals} />}
+      </section>
+
+      <section className="kismaTrust">
+        <div className="shell kismaTrustGrid">
+          <div><ShieldCheck size={18}/><span><strong>Secure checkout</strong><small>Payments handled through Shopify.</small></span></div>
+          <div><Truck size={18}/><span><strong>UK delivery options</strong><small>Available methods shown at checkout.</small></span></div>
+          <div><RotateCcw size={18}/><span><strong>Simple returns</strong><small>Clear support after purchase.</small></span></div>
+          <div><Headphones size={18}/><span><strong>Customer support</strong><small>Help for product and order questions.</small></span></div>
         </div>
       </section>
 
-      <section className="serviceBand" id="service">
-        <div className="shell serviceGrid">
-          <div className="serviceItem">
-            <Truck size={22}/>
-            <div><strong>Tracked UK delivery</strong><span>Clear fulfilment from checkout to door.</span></div>
-          </div>
-          <div className="serviceItem">
-            <ShieldCheck size={22}/>
-            <div><strong>Secure checkout</strong><span>Payments handled through Shopify.</span></div>
-          </div>
-          <div className="serviceItem">
-            <RotateCcw size={22}/>
-            <div><strong>Simple returns</strong><span>Clear post-purchase support when needed.</span></div>
-          </div>
-          <div className="serviceItem">
-            <Headphones size={22}/>
-            <div><strong>Human support</strong><span>Real help for product and order questions.</span></div>
-          </div>
+      <section className="kismaClosing">
+        <div className="shell">
+          <span>MRK VENTURES</span>
+          <h2>Practical products.<br/>Straightforward shopping.</h2>
+          <p>Useful products for everyday homes, journeys and routines — presented with more clarity, colour and depth.</p>
+          <a href="#shop">Shop all products</a>
         </div>
       </section>
-
-      <section className="manifesto shell">
-        <div className="manifestoTop">
-          <span>MRK VENTURES / 2026</span>
-          <BadgeCheck size={22}/>
-        </div>
-        <h2>
-          A better store is not more crowded.
-          <span> It is more considered.</span>
-        </h2>
-        <div className="manifestoBottom">
-          <p>Clear categories, straightforward product choices and a secure checkout from start to finish.</p>
-          <a href="#shop">Shop all products <ArrowRight size={15}/></a>
-        </div>
-      </section>
-
-      <footer className="footer shell">
-        <div className="footerBrand">
-          <img className="brandLogo footerLogo" src="/mrk-logo.svg" alt="MRK Ventures"/>
-          <span>Curated essentials for everyday life.</span>
-        </div>
-        <div className="footerLinks">
-          <a href="#shop">Shop</a>
-          <a href="#story">Our standard</a>
-          <a href="#service">Service</a>
-        </div>
-        <span>© {new Date().getFullYear()} {storeName}. Shopify-powered commerce.</span>
-      </footer>
     </main>
   );
 }

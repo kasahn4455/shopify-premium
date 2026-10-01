@@ -1,12 +1,38 @@
 export const dynamic = "force-dynamic";
 
-import Image from "next/image";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft, Box, ShieldCheck, Sparkles, Truck } from "lucide-react";
 import VariantBuy from "@/components/VariantBuy";
+import ProductGallery from "@/components/ProductGallery";
 import { getProduct, getShopifyDomain } from "@/lib/shopify";
 
-export default async function ProductPage({ params }: { params: Promise<{ handle: string }> }) {
+type PageProps = { params: Promise<{ handle: string }> };
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { handle } = await params;
+  const product = await getProduct(handle);
+  if (!product) return { title: "Product unavailable | Raheem Ventures" };
+  const description = product.description || "A considered everyday essential from Raheem Ventures.";
+  return {
+    title: product.title,
+    description,
+    openGraph: {
+      title: product.title,
+      description,
+      type: "website",
+      images: product.featuredImage ? [{ url: product.featuredImage.url, alt: product.featuredImage.altText || product.title }] : []
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: product.title,
+      description,
+      images: product.featuredImage ? [product.featuredImage.url] : []
+    }
+  };
+}
+
+export default async function ProductPage({ params }: PageProps) {
   const { handle } = await params;
   const product = await getProduct(handle);
   if (!product) {
@@ -20,9 +46,31 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
   }
 
   const variants = product.variants.edges.map(edge => edge.node);
+  const galleryImages = product.images?.length ? product.images : product.featuredImage ? [product.featuredImage] : [];
+  const firstVariant = variants[0];
+  const productJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.title,
+    description: product.description || undefined,
+    image: galleryImages.map(image => image.url),
+    brand: { "@type": "Brand", name: "Raheem Ventures" },
+    offers: firstVariant ? {
+      "@type": "Offer",
+      priceCurrency: firstVariant.price.currencyCode,
+      price: firstVariant.price.amount,
+      availability: firstVariant.availableForSale ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+      url: "/products/" + product.handle
+    } : undefined
+  };
 
   return (
     <main className="productPage shell">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd).replace(/</g, "\\u003c") }}
+      />
+
       <header className="productHeader">
         <Link href="/" className="backLink"><ArrowLeft size={15}/> Back to collection</Link>
         <Link href="/" className="brandMark compactBrand">
@@ -33,19 +81,7 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
 
       <div className="productDetail">
         <div className="detailVisual">
-          <div className="detailImage">
-            {product.featuredImage ? (
-              <Image
-                src={product.featuredImage.url}
-                alt={product.featuredImage.altText || product.title}
-                fill
-                priority
-                sizes="(max-width: 850px) 100vw, 58vw"
-              />
-            ) : (
-              <div className="imageFallback large">RV</div>
-            )}
-          </div>
+          <ProductGallery images={galleryImages} title={product.title} />
           <span className="detailStamp">CURATED / RV</span>
         </div>
 

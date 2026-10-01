@@ -6,7 +6,7 @@ import PremiumHeader from "@/components/PremiumHeader";
 import CatalogExperience from "@/components/CatalogExperience";
 import { getProducts, type Product } from "@/lib/shopify";
 
-const storeName = process.env.NEXT_PUBLIC_STORE_NAME || "Raheem Ventures";
+const storeName = "MRK Ventures";
 
 function money(product: Product) {
   const variant = product.variants.edges[0]?.node;
@@ -46,7 +46,7 @@ export default async function Home() {
 
       <PremiumHero products={heroProducts} />
 
-      <section className="marquee" aria-label="Raheem Ventures values">
+      <section className="marquee" aria-label="MRK Ventures values">
         <div className="marqueeTrack">
           <span>CURATED UTILITY</span><i>◆</i>
           <span>MODERN FORM</span><i>◆</i>
@@ -59,12 +59,12 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="typeStage shell" aria-label="Raheem Ventures design statement">
+      <section className="typeStage shell" aria-label="MRK Ventures design statement">
         <div className="typeStageRule"><span>FORM</span><span>FUNCTION</span><span>DETAIL</span></div>
         <div className="typeStageMain">
-          <span className="typeStageGhost">RV</span>
+          <span className="typeStageGhost">MRK</span>
           <div className="typeStageCopy">
-            <span className="eyebrow">THE RAHEEM STANDARD</span>
+            <span className="eyebrow">THE MRK STANDARD</span>
             <h2><span>Quiet luxury.</span><em>Real utility.</em></h2>
             <p>Simple products. Clear purpose. Better everyday choices without the clutter.</p>
           </div>
@@ -112,7 +112,7 @@ export default async function Home() {
         <div className="editorialSculpture" aria-hidden="true">
           <div className="sculptureRing ringA"/>
           <div className="sculptureRing ringB"/>
-          <div className="sculptureCore">RV</div>
+          <div className="sculptureCore">MRK</div>
         </div>
       </section>
 
@@ -139,7 +139,7 @@ export default async function Home() {
 
       <section className="manifesto shell">
         <div className="manifestoTop">
-          <span>RAHEEM VENTURES / 2026</span>
+          <span>MRK VENTURES / 2026</span>
           <BadgeCheck size={22}/>
         </div>
         <h2>
@@ -154,7 +154,7 @@ export default async function Home() {
 
       <footer className="footer shell">
         <div className="footerBrand">
-          <span className="brandMonogram">RV</span>
+          <img className="brandLogo footerLogo" src="/mrk-logo.svg" alt="MRK Ventures"/>
           <strong>{storeName}</strong>
         </div>
         <div className="footerLinks">

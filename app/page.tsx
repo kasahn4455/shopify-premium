@@ -1,6 +1,7 @@
 export const dynamic = "force-dynamic";
 
-import { ArrowRight, BadgeCheck, Headphones, RotateCcw, ShieldCheck, Truck } from "lucide-react";
+import Image from "next/image";
+import { Headphones, RotateCcw, ShieldCheck, Truck } from "lucide-react";
 import PremiumHero from "@/components/PremiumHero";
 import PremiumHeader from "@/components/PremiumHeader";
 import CatalogExperience from "@/components/CatalogExperience";
@@ -11,160 +12,73 @@ const storeName = process.env.NEXT_PUBLIC_STORE_NAME || "Raheem Ventures";
 function money(product: Product) {
   const variant = product.variants.edges[0]?.node;
   if (!variant) return "";
-  return new Intl.NumberFormat("en-GB", {
-    style: "currency",
-    currency: variant.price.currencyCode
-  }).format(Number(variant.price.amount));
+  return new Intl.NumberFormat("en-GB", { style: "currency", currency: variant.price.currencyCode }).format(Number(variant.price.amount));
 }
 
 export default async function Home() {
   let products: Product[] = [];
   let setupError = false;
-
-  try {
-    products = await getProducts(12);
-  } catch {
-    setupError = true;
-  }
+  try { products = await getProducts(12); } catch { setupError = true; }
 
   const categories = Array.from(new Set(products.map(product => (product.productType || "Essentials").trim()).filter(Boolean)));
-
-  const heroProducts = products.slice(0, 2).map(product => ({
-    title: product.title,
-    image: product.featuredImage?.url,
-    price: money(product),
-    handle: product.handle
-  }));
+  const heroProducts = products.slice(0, 2).map(product => ({ title: product.title, image: product.featuredImage?.url, price: money(product), handle: product.handle }));
+  const storyProduct = products[2] || products[0];
 
   return (
     <main>
-      <div className="announcement">
+      <div className="editorialAnnouncement">
         <span>Complimentary UK delivery on qualifying orders</span>
-        <span className="announcementDot">•</span>
-        <span>Secure checkout powered by Shopify</span>
+        <span>Secure checkout by Shopify</span>
       </div>
+      <PremiumHeader storeName={storeName} categories={categories}/>
+      <PremiumHero products={heroProducts}/>
 
-      <PremiumHeader storeName={storeName} categories={categories} />
-
-      <PremiumHero products={heroProducts} />
-
-      <section className="marquee" aria-label="Raheem Ventures values">
-        <div className="marqueeTrack">
-          <span>CURATED UTILITY</span><i>◆</i>
-          <span>MODERN FORM</span><i>◆</i>
-          <span>EVERYDAY FUNCTION</span><i>◆</i>
-          <span>CONSIDERED QUALITY</span><i>◆</i>
-          <span>CURATED UTILITY</span><i>◆</i>
-          <span>MODERN FORM</span><i>◆</i>
-          <span>EVERYDAY FUNCTION</span><i>◆</i>
-          <span>CONSIDERED QUALITY</span><i>◆</i>
+      <section className="editorialIntro shell" id="story">
+        <div className="editorialIntroIndex">01</div>
+        <div className="editorialIntroText">
+          <span className="eyebrow">Our approach</span>
+          <h2>Less choice.<br/><em>Better choice.</em></h2>
         </div>
+        <p>We select products for usefulness, finish and ease of living. The collection stays intentionally focused so browsing feels considered rather than crowded.</p>
       </section>
 
-      <section className="typeStage shell" aria-label="Raheem Ventures design statement">
-        <div className="typeStageRule"><span>FORM</span><span>FUNCTION</span><span>DETAIL</span></div>
-        <div className="typeStageMain">
-          <span className="typeStageGhost">RV</span>
-          <div className="typeStageCopy">
-            <span className="eyebrow">THE RAHEEM STANDARD</span>
-            <h2><span>Quiet luxury.</span><em>Real utility.</em></h2>
-            <p>Not louder. Not busier. Better proportioned, better considered, better to live with.</p>
-          </div>
-          <div className="kineticObject" aria-hidden="true">
-            <div className="kineticOrb"/>
-            <div className="kineticRing ringOne"/>
-            <div className="kineticRing ringTwo"/>
-            <div className="kineticAxis"/>
-          </div>
+      <section className="shop editorialShop shell" id="shop">
+        <div className="editorialSectionHead">
+          <div><span className="eyebrow">Shop</span><h2>The collection</h2></div>
+          <p>Objects for everyday use, selected with the same standard across every category.</p>
         </div>
-      </section>
-
-      <section className="shop shell" id="shop">
-        <div className="sectionHead premiumHead">
-          <div>
-            <span className="eyebrow">THE EDIT</span>
-            <h2>Selected, not saturated.</h2>
-          </div>
-          <div className="sectionIntro">
-            <p>A focused collection of useful products chosen to look good, work well and earn their place in your home.</p>
-            <span>{String(products.length).padStart(2, "0")} PRODUCTS</span>
-          </div>
-        </div>
-
         {setupError ? (
-          <div className="setupCard">
-            <span className="eyebrow">STORE CONNECTION</span>
-            <strong>Shopify products are temporarily unavailable.</strong>
-            <p>The storefront itself is live. Product inventory will appear automatically when the Shopify public catalogue is reachable.</p>
-          </div>
-        ) : (
-          <CatalogExperience products={products} />
-        )}
+          <div className="setupCard"><span className="eyebrow">Store connection</span><strong>Shopify products are temporarily unavailable.</strong><p>Products will return automatically when the catalogue is reachable.</p></div>
+        ) : <CatalogExperience products={products}/>} 
       </section>
 
-      <section className="editorialBreak shell" id="story">
-        <div className="editorialNumber">01</div>
-        <div className="editorialCopy">
-          <span className="eyebrow">OUR STANDARD</span>
-          <h2>Useful first.<br/><em>Beautiful by default.</em></h2>
-          <p>
-            We favour pieces that solve a real problem without adding visual noise. The result is a tighter collection with a clearer reason to exist.
-          </p>
-        </div>
-        <div className="editorialSculpture" aria-hidden="true">
-          <div className="sculptureRing ringA"/>
-          <div className="sculptureRing ringB"/>
-          <div className="sculptureCore">RV</div>
-        </div>
-      </section>
+      {storyProduct?.featuredImage && (
+        <section className="editorialStory shell">
+          <div className="editorialStoryMedia">
+            <Image src={storyProduct.featuredImage.url} alt={storyProduct.featuredImage.altText || storyProduct.title} fill sizes="(max-width: 800px) 100vw, 58vw"/>
+          </div>
+          <div className="editorialStoryCopy">
+            <span className="eyebrow">Selected detail / 02</span>
+            <h2>Made for the rhythm of everyday life.</h2>
+            <p>Useful objects should feel effortless. We look for proportion, practical detail and a visual calm that works naturally in the home.</p>
+            <a href={"/products/" + storyProduct.handle}>View {storyProduct.title}</a>
+          </div>
+        </section>
+      )}
 
-      <section className="serviceBand" id="service">
-        <div className="shell serviceGrid">
-          <div className="serviceItem">
-            <Truck size={22}/>
-            <div><strong>Tracked UK delivery</strong><span>Clear fulfilment from checkout to door.</span></div>
-          </div>
-          <div className="serviceItem">
-            <ShieldCheck size={22}/>
-            <div><strong>Secure checkout</strong><span>Payments handled through Shopify.</span></div>
-          </div>
-          <div className="serviceItem">
-            <RotateCcw size={22}/>
-            <div><strong>Simple returns</strong><span>Clear post-purchase support when needed.</span></div>
-          </div>
-          <div className="serviceItem">
-            <Headphones size={22}/>
-            <div><strong>Human support</strong><span>Real help for product and order questions.</span></div>
-          </div>
+      <section className="editorialServices" id="service">
+        <div className="shell editorialServiceGrid">
+          <div><Truck size={18}/><strong>Tracked delivery</strong><span>Clear updates from dispatch to door.</span></div>
+          <div><ShieldCheck size={18}/><strong>Secure checkout</strong><span>Payments handled securely by Shopify.</span></div>
+          <div><RotateCcw size={18}/><strong>Simple returns</strong><span>Straightforward support if something is not right.</span></div>
+          <div><Headphones size={18}/><strong>Human support</strong><span>Help when you need it, without marketplace clutter.</span></div>
         </div>
       </section>
 
-      <section className="manifesto shell">
-        <div className="manifestoTop">
-          <span>RAHEEM VENTURES / 2026</span>
-          <BadgeCheck size={22}/>
-        </div>
-        <h2>
-          A better store is not more crowded.
-          <span> It is more considered.</span>
-        </h2>
-        <div className="manifestoBottom">
-          <p>Quality, clarity and confidence — from first scroll to final checkout.</p>
-          <a href="#shop">Explore the collection <ArrowRight size={15}/></a>
-        </div>
-      </section>
-
-      <footer className="footer shell">
-        <div className="footerBrand">
-          <span className="brandMonogram">RV</span>
-          <strong>{storeName}</strong>
-        </div>
-        <div className="footerLinks">
-          <a href="#shop">Shop</a>
-          <a href="#story">Our standard</a>
-          <a href="#service">Service</a>
-        </div>
-        <span>© {new Date().getFullYear()} {storeName}. Shopify-powered commerce.</span>
+      <footer className="editorialFooter shell">
+        <div className="editorialFooterBrand"><strong>{storeName}</strong><span>Objects for everyday living.</span></div>
+        <div className="editorialFooterLinks"><a href="#shop">Shop</a><a href="#story">About</a><a href="#service">Delivery & returns</a></div>
+        <span>© {new Date().getFullYear()} {storeName}</span>
       </footer>
     </main>
   );

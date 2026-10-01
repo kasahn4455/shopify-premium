@@ -22,6 +22,10 @@ export type Product = {
   };
 };
 
+type StorefrontProduct = Omit<Product, "images"> & {
+  images: { edges: Array<{ node: ProductImage }> };
+};
+
 type AjaxImage = string | { src?: string; url?: string; alt?: string | null; altText?: string | null };
 type AjaxProduct = {
   id: number;
@@ -104,22 +108,22 @@ export async function shopifyFetch<T>(query: string, variables: Record<string, u
 
 export async function getProducts(first = 12) {
   if (!token) return publicProducts(first);
-  const data = await shopifyFetch<{ products: { edges: Array<{ node: Product }> } }>(
+  const data = await shopifyFetch<{ products: { edges: Array<{ node: StorefrontProduct }> } }>(
     "query Products($first: Int!) { products(first: $first, sortKey: BEST_SELLING) { edges { node { id handle title description featuredImage { url altText } images(first: 6) { edges { node { url altText } } } variants(first: 10) { edges { node { id title availableForSale price { amount currencyCode } } } } } } } }",
     { first }
   );
-  return data.products.edges.map(({ node }) => ({ ...node, images: (node as any).images?.edges?.map((edge: any) => edge.node) || (node.featuredImage ? [node.featuredImage] : []) }));
+  return data.products.edges.map(({ node }) => ({ ...node, images: node.images.edges.map(edge => edge.node) })) as Product[];
 }
 
 export async function getProduct(handle: string) {
   if (!token) return publicProduct(handle);
-  const data = await shopifyFetch<{ product: (Product & { images?: { edges: Array<{ node: ProductImage }> } }) | null }>(
+  const data = await shopifyFetch<{ product: StorefrontProduct | null }>(
     "query Product($handle: String!) { product(handle: $handle) { id handle title description featuredImage { url altText } images(first: 8) { edges { node { url altText } } } variants(first: 25) { edges { node { id title availableForSale price { amount currencyCode } } } } } }",
     { handle }
   );
   if (!data.product) return null;
   const raw = data.product;
-  const images = raw.images && !Array.isArray(raw.images) ? raw.images.edges.map(edge => edge.node) : [];
+  const images = raw.images.edges.map(edge => edge.node);
   return { ...raw, images: images.length ? images : raw.featuredImage ? [raw.featuredImage] : [] } as Product;
 }
 

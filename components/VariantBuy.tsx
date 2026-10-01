@@ -21,6 +21,7 @@ export default function VariantBuy({
   const [selectedId, setSelectedId] = useState(available?.id || "");
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const selected = useMemo(
     () => variants.find(v => v.id === selectedId) || available,
@@ -36,6 +37,7 @@ export default function VariantBuy({
 
   async function checkout() {
     if (!selected.availableForSale) return;
+    setError("");
     setLoading(true);
     try {
       if (/^\d+$/.test(selected.id)) {
@@ -52,7 +54,7 @@ export default function VariantBuy({
       if (!res.ok) throw new Error(data.error || "Unable to create checkout");
       window.location.href = data.checkoutUrl;
     } catch (error) {
-      alert(error instanceof Error ? error.message : "Something went wrong");
+      setError(error instanceof Error ? error.message : "Something went wrong");
       setLoading(false);
     }
   }
@@ -73,6 +75,7 @@ export default function VariantBuy({
             {variants.map(variant => (
               <button
                 key={variant.id}
+                type="button"
                 className={variant.id === selected.id ? "variantPill active" : "variantPill"}
                 onClick={() => setSelectedId(variant.id)}
                 disabled={!variant.availableForSale}
@@ -86,15 +89,17 @@ export default function VariantBuy({
 
       <div className="purchaseRow">
         <div className="quantityPicker">
-          <button aria-label="Decrease quantity" onClick={() => setQuantity(q => Math.max(1, q - 1))}><Minus size={14}/></button>
+          <button type="button" aria-label="Decrease quantity" onClick={() => setQuantity(q => Math.max(1, q - 1))}><Minus size={14}/></button>
           <span>{quantity}</span>
-          <button aria-label="Increase quantity" onClick={() => setQuantity(q => q + 1)}><Plus size={14}/></button>
+          <button type="button" aria-label="Increase quantity" onClick={() => setQuantity(q => q + 1)}><Plus size={14}/></button>
         </div>
-        <button className="primaryButton buyNow" disabled={!selected.availableForSale || loading} onClick={checkout}>
+        <button type="button" className="primaryButton buyNow" disabled={!selected.availableForSale || loading} onClick={checkout}>
           <ShoppingBag size={17}/>
           {loading ? "Preparing checkout…" : "Buy now"}
         </button>
       </div>
+
+      {error && <div className="checkoutError" role="alert">{error}</div>}
 
       <div className="checkoutNotes">
         <span>Secure checkout</span>

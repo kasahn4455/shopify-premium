@@ -42,7 +42,7 @@ export default function PremiumHeader({ storeName }: { storeName: string }) {
           <a className="categoryLead" href="#shop">All categories</a>
           <div className="categoryDivider" />
           <div className="categoryRail">
-            {categories.slice(0, 7).map((category) => (
+            {categories.map((category) => (
               <a key={category} href={"#cat-" + encodeURIComponent(category)}>{category}</a>
             ))}
           </div>
@@ -54,7 +54,7 @@ export default function PremiumHeader({ storeName }: { storeName: string }) {
         <div className="mobileMenuInner">
           <span className="eyebrow">SHOP</span>
           <a href="#shop" onClick={() => setOpen(false)}>All categories <ArrowRight size={18}/></a>
-          {categories.slice(0, 5).map((category) => (
+          {categories.map((category) => (
             <a key={category} href={"#cat-" + encodeURIComponent(category)} onClick={() => setOpen(false)}>{category} <ArrowRight size={18}/></a>
           ))}
           <div className="mobileMenuMeta"><span>{storeName}</span><span>Curated essentials. Built for everyday life.</span></div>

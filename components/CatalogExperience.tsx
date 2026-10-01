@@ -94,12 +94,21 @@ export default function CatalogExperience({ products }: { products: Product[] })
           </div>
         </aside>
 
-        <div className="productGrid premiumGrid catalogGrid">
-          {visible.map((product, index) => {
-            const variant = product.variants.edges[0]?.node;
-            return <TiltProductCard key={product.id} index={index} handle={product.handle} title={product.title} image={product.featuredImage?.url} alt={product.featuredImage?.altText} price={variant ? money(product) : undefined} available={Boolean(variant?.availableForSale)} featured={index < 2 && active === "All"}/>;
-          })}
-        </div>
+        {visible.length ? (
+          <div className="productGrid premiumGrid catalogGrid">
+            {visible.map((product, index) => {
+              const variant = product.variants.edges[0]?.node;
+              return <TiltProductCard key={product.id} index={index} handle={product.handle} title={product.title} image={product.featuredImage?.url} alt={product.featuredImage?.altText} price={variant ? money(product) : undefined} available={Boolean(variant?.availableForSale)} featured={index < 2 && active === "All"}/>;
+            })}
+          </div>
+        ) : (
+          <div className="catalogEmpty">
+            <span className="eyebrow">{active}</span>
+            <h3>More products are being added here.</h3>
+            <p>Browse all products for now, or choose another department.</p>
+            <button onClick={() => setActive("All")}>View all products</button>
+          </div>
+        )}
       </div>
     </div>
   );

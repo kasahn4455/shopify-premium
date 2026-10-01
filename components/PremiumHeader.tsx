@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, Menu, X } from "lucide-react";
 
-export default function PremiumHeader({ storeName }: { storeName: string }) {
+export default function PremiumHeader({ storeName, categories }: { storeName: string; categories: string[] }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -23,27 +23,41 @@ export default function PremiumHeader({ storeName }: { storeName: string }) {
   return (
     <>
       <header className={scrolled ? "siteHeader shell isScrolled" : "siteHeader shell"}>
-        <Link href="/" className="brandMark" aria-label={storeName}>
-          <span className="brandMonogram">RV</span>
-          <span className="brandWords">{storeName}</span>
-        </Link>
-        <nav className="navLinks" aria-label="Primary navigation">
-          <a href="#shop">Collection</a>
-          <a href="#story">Our standard</a>
-          <a href="#service">Delivery & returns</a>
-        </nav>
-        <a href="#shop" className="navCta">Shop now <ArrowRight size={14}/></a>
-        <button className="mobileMenuButton" aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} onClick={() => setOpen(v => !v)}>
-          {open ? <X size={19}/> : <Menu size={19}/>}
-        </button>
+        <div className="headerMainRow">
+          <Link href="/" className="brandMark" aria-label={storeName}>
+            <span className="brandMonogram">RV</span>
+            <span className="brandWords">{storeName}</span>
+          </Link>
+          <nav className="navLinks" aria-label="Primary navigation">
+            <a href="#shop">Shop</a>
+            <a href="#story">Our standard</a>
+            <a href="#service">Service</a>
+          </nav>
+          <a href="#shop" className="navCta">Explore <ArrowRight size={14}/></a>
+          <button className="mobileMenuButton" aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} onClick={() => setOpen(v => !v)}>
+            {open ? <X size={19}/> : <Menu size={19}/>} 
+          </button>
+        </div>
+        <div className="headerCategoryRow" aria-label="Shop categories">
+          <a className="categoryLead" href="#shop">All categories</a>
+          <div className="categoryDivider" />
+          <div className="categoryRail">
+            {categories.slice(0, 7).map((category) => (
+              <a key={category} href={"#cat-" + encodeURIComponent(category)}>{category}</a>
+            ))}
+          </div>
+          <span className="categoryMeta">Curated / UK</span>
+        </div>
       </header>
+
       <div className={open ? "mobileMenu open" : "mobileMenu"} aria-hidden={!open}>
         <div className="mobileMenuInner">
-          <span className="eyebrow">NAVIGATION</span>
-          <a href="#shop" onClick={() => setOpen(false)}>Collection <ArrowRight size={18}/></a>
-          <a href="#story" onClick={() => setOpen(false)}>Our standard <ArrowRight size={18}/></a>
-          <a href="#service" onClick={() => setOpen(false)}>Delivery & returns <ArrowRight size={18}/></a>
-          <div className="mobileMenuMeta"><span>Raheem Ventures</span><span>Curated modern utility.</span></div>
+          <span className="eyebrow">SHOP</span>
+          <a href="#shop" onClick={() => setOpen(false)}>All categories <ArrowRight size={18}/></a>
+          {categories.slice(0, 5).map((category) => (
+            <a key={category} href={"#cat-" + encodeURIComponent(category)} onClick={() => setOpen(false)}>{category} <ArrowRight size={18}/></a>
+          ))}
+          <div className="mobileMenuMeta"><span>{storeName}</span><span>Curated modern utility.</span></div>
         </div>
       </div>
     </>

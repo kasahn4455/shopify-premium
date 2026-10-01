@@ -27,8 +27,6 @@ export default async function Home() {
     setupError = true;
   }
 
-  const categories = Array.from(new Set(products.map(product => (product.productType || "Essentials").trim()).filter(Boolean)));
-
   const heroProducts = products.slice(0, 2).map(product => ({
     title: product.title,
     image: product.featuredImage?.url,
@@ -44,7 +42,7 @@ export default async function Home() {
         <span>Secure checkout powered by Shopify</span>
       </div>
 
-      <PremiumHeader storeName={storeName} categories={categories} />
+      <PremiumHeader storeName={storeName} />
 
       <PremiumHero products={heroProducts} />
 
@@ -68,7 +66,7 @@ export default async function Home() {
           <div className="typeStageCopy">
             <span className="eyebrow">THE RAHEEM STANDARD</span>
             <h2><span>Quiet luxury.</span><em>Real utility.</em></h2>
-            <p>Not louder. Not busier. Better proportioned, better considered, better to live with.</p>
+            <p>Simple products. Clear purpose. Better everyday choices without the clutter.</p>
           </div>
           <div className="kineticObject" aria-hidden="true">
             <div className="kineticOrb"/>
@@ -83,10 +81,10 @@ export default async function Home() {
         <div className="sectionHead premiumHead">
           <div>
             <span className="eyebrow">THE EDIT</span>
-            <h2>Selected, not saturated.</h2>
+            <h2>Everything useful. Nothing unnecessary.</h2>
           </div>
           <div className="sectionIntro">
-            <p>A focused collection of useful products chosen to look good, work well and earn their place in your home.</p>
+            <p>Browse practical everyday products across home, kitchen, car, travel, tech and gifts — organised to help you find what you need quickly.</p>
             <span>{String(products.length).padStart(2, "0")} PRODUCTS</span>
           </div>
         </div>
@@ -106,9 +104,9 @@ export default async function Home() {
         <div className="editorialNumber">01</div>
         <div className="editorialCopy">
           <span className="eyebrow">OUR STANDARD</span>
-          <h2>Useful first.<br/><em>Beautiful by default.</em></h2>
+          <h2>Practical first.<br/><em>Chosen with care.</em></h2>
           <p>
-            We favour pieces that solve a real problem without adding visual noise. The result is a tighter collection with a clearer reason to exist.
+            We focus on useful products that solve everyday problems, feel easy to use and offer clear value.
           </p>
         </div>
         <div className="editorialSculpture" aria-hidden="true">
@@ -149,7 +147,7 @@ export default async function Home() {
           <span> It is more considered.</span>
         </h2>
         <div className="manifestoBottom">
-          <p>Quality, clarity and confidence — from first scroll to final checkout.</p>
+          <p>Clear categories, straightforward product choices and a secure checkout from start to finish.</p>
           <a href="#shop">Explore the collection <ArrowRight size={15}/></a>
         </div>
       </section>

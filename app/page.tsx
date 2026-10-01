@@ -22,7 +22,7 @@ export default async function Home() {
   let setupError = false;
 
   try {
-    products = await getProducts(12);
+    products = await getProducts(64);
   } catch {
     setupError = true;
   }

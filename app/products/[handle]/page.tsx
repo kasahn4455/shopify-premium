@@ -12,8 +12,8 @@ type PageProps = { params: Promise<{ handle: string }> };
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { handle } = await params;
   const product = await getProduct(handle);
-  if (!product) return { title: "Product unavailable | Raheem Ventures" };
-  const description = product.description || "A considered everyday essential from Raheem Ventures.";
+  if (!product) return { title: "Product unavailable | MRK Ventures" };
+  const description = product.description || "A considered everyday essential from MRK Ventures.";
   return {
     title: product.title,
     description,
@@ -54,7 +54,7 @@ export default async function ProductPage({ params }: PageProps) {
     name: product.title,
     description: product.description || undefined,
     image: galleryImages.map(image => image.url),
-    brand: { "@type": "Brand", name: "Raheem Ventures" },
+    brand: { "@type": "Brand", name: "MRK Ventures" },
     offers: firstVariant ? {
       "@type": "Offer",
       priceCurrency: firstVariant.price.currencyCode,
@@ -75,18 +75,18 @@ export default async function ProductPage({ params }: PageProps) {
         <Link href="/" className="backLink"><ArrowLeft size={15}/> Back to collection</Link>
         <Link href="/" className="brandMark compactBrand">
           <span className="brandMonogram">RV</span>
-          <span className="brandWords">Raheem Ventures</span>
+          <span className="brandWords">MRK Ventures</span>
         </Link>
       </header>
 
       <div className="productDetail">
         <div className="detailVisual">
           <ProductGallery images={galleryImages} title={product.title} />
-          <span className="detailStamp">CURATED / RV</span>
+          <span className="detailStamp">CURATED / MRK</span>
         </div>
 
         <div className="detailCopy">
-          <span className="eyebrow">RAHEEM VENTURES EDIT</span>
+          <span className="eyebrow">MRK VENTURES EDIT</span>
           <h1>{product.title}</h1>
           <p className="productDescription">
             {product.description || "A considered everyday essential selected for useful design, dependable function and a clean finish."}

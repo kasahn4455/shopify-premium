@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title">
+<title id="title">MRK Ventures mark</title>
+<rect x="2" y="2" width="116" height="116" rx="8" fill="#11110f"/>
+<text x="60" y="69" text-anchor="middle" font-family="Georgia,Times New Roman,serif" font-size="42" letter-spacing="-3" fill="#f3efe5">MRK</text>
+<line x1="30" y1="83" x2="90" y2="83" stroke="#b59a6a" stroke-width="2"/>
+</svg>

@@ -3,7 +3,7 @@ export const dynamic = "force-dynamic";
 import { ArrowRight, BadgeCheck, Headphones, RotateCcw, ShieldCheck, Truck } from "lucide-react";
 import PremiumHero from "@/components/PremiumHero";
 import PremiumHeader from "@/components/PremiumHeader";
-import TiltProductCard from "@/components/TiltProductCard";
+import CatalogExperience from "@/components/CatalogExperience";
 import { getProducts, type Product } from "@/lib/shopify";
 
 const storeName = process.env.NEXT_PUBLIC_STORE_NAME || "Raheem Ventures";
@@ -27,6 +27,8 @@ export default async function Home() {
     setupError = true;
   }
 
+  const categories = Array.from(new Set(products.map(product => (product.productType || "Essentials").trim()).filter(Boolean)));
+
   const heroProducts = products.slice(0, 2).map(product => ({
     title: product.title,
     image: product.featuredImage?.url,
@@ -42,7 +44,7 @@ export default async function Home() {
         <span>Secure checkout powered by Shopify</span>
       </div>
 
-      <PremiumHeader storeName={storeName} />
+      <PremiumHeader storeName={storeName} categories={categories} />
 
       <PremiumHero products={heroProducts} />
 
@@ -96,24 +98,7 @@ export default async function Home() {
             <p>The storefront itself is live. Product inventory will appear automatically when the Shopify public catalogue is reachable.</p>
           </div>
         ) : (
-          <div className="productGrid premiumGrid">
-            {products.map((product, index) => {
-              const variant = product.variants.edges[0]?.node;
-              return (
-                <TiltProductCard
-                  key={product.id}
-                  index={index}
-                  handle={product.handle}
-                  title={product.title}
-                  image={product.featuredImage?.url}
-                  alt={product.featuredImage?.altText}
-                  price={variant ? money(product) : undefined}
-                  available={Boolean(variant?.availableForSale)}
-                  featured={index < 2}
-                />
-              );
-            })}
-          </div>
+          <CatalogExperience products={products} />
         )}
       </section>
 

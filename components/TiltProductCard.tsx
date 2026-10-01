@@ -29,7 +29,7 @@ export default function TiltProductCard({ index, handle, title, image, alt, pric
       <div className="productImage">
         <span className="productIndex">{String(index + 1).padStart(2, "0")}</span>
         {featured && <span className="productBadge">FEATURED</span>}
-        {image ? <Image src={image} alt={alt || title} fill sizes="(max-width: 700px) 50vw, 25vw" /> : <div className="imageFallback">RV</div>}
+        {image ? <Image src={image} alt={alt || title} fill sizes="(max-width: 700px) 50vw, 25vw" /> : <div className="imageFallback">MRK</div>}
         <div className="cardGlare" aria-hidden="true" />
         <div className="productHoverAction">View product <ArrowRight size={15}/></div>
       </div>

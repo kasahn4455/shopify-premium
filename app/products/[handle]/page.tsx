@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import BuyButton from "@/components/BuyButton";
-import { getProduct } from "@/lib/shopify";
+import { getProduct, getShopifyDomain } from "@/lib/shopify";
 
 export default async function ProductPage({ params }: { params: Promise<{ handle: string }> }) {
   const { handle } = await params;
@@ -35,7 +35,13 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
             </div>
           )}
           <p>{product.description || "Thoughtfully selected for quality, usefulness and everyday appeal."}</p>
-          {variant && <BuyButton merchandiseId={variant.id} disabled={!variant.availableForSale} />}
+          {variant && (
+            <BuyButton
+              merchandiseId={variant.id}
+              shopDomain={getShopifyDomain()}
+              disabled={!variant.availableForSale}
+            />
+          )}
           <div className="finePrint">Secure checkout · Shopify-powered payments · Tracked fulfilment</div>
         </div>
       </div>

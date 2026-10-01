@@ -40,7 +40,7 @@ export default function PremiumHero({ products }: { products: HeroProduct[] }) {
     <section className="heroCinematic shell">
       <div className="heroCinematicCopy">
         <div className="heroTopline">
-          <span>RAHEEM VENTURES / CURATED COMMERCE</span>
+          <span>MRK VENTURES / CURATED COMMERCE</span>
           <span>UK / 2026</span>
         </div>
 
@@ -78,7 +78,7 @@ export default function PremiumHero({ products }: { products: HeroProduct[] }) {
 
           <div className="productPlane planePrimary">
             <div className="productPlaneImage">
-              {lead?.image ? <Image src={lead.image} alt={lead.title} fill priority sizes="(max-width: 900px) 80vw, 38vw"/> : <div className="objectPlaceholder">RV</div>}
+              {lead?.image ? <Image src={lead.image} alt={lead.title} fill priority sizes="(max-width: 900px) 80vw, 38vw"/> : <div className="objectPlaceholder">MRK</div>}
             </div>
             <div className="planeCaption">
               <span>01 / FEATURED OBJECT</span>
@@ -89,7 +89,7 @@ export default function PremiumHero({ products }: { products: HeroProduct[] }) {
 
           <div className="productPlane planeSecondary">
             <div className="productPlaneImage">
-              {second?.image ? <Image src={second.image} alt={second.title} fill sizes="(max-width: 900px) 44vw, 20vw"/> : <div className="objectPlaceholder">RV</div>}
+              {second?.image ? <Image src={second.image} alt={second.title} fill sizes="(max-width: 900px) 44vw, 20vw"/> : <div className="objectPlaceholder">MRK</div>}
             </div>
             <div className="planeCaption mini">
               <span>02 / SELECTED</span>
@@ -97,13 +97,13 @@ export default function PremiumHero({ products }: { products: HeroProduct[] }) {
             </div>
           </div>
 
-          <div className="brandTotem" aria-hidden="true"><span>R</span><b>V</b><span>2026</span></div>
+          <div className="brandTotem" aria-hidden="true"><img src="/mrk-mark.svg" alt=""/></div>
 
           {lead?.handle && <Link href={"/products/" + lead.handle} className="stageLink cinematicLink">View featured object <ArrowRight size={14}/></Link>}
         </div>
       </div>
 
-      <div className="heroVerticalType" aria-hidden="true">RAHEEM / VENTURES / OBJECTS / FORM / FUNCTION</div>
+      <div className="heroVerticalType" aria-hidden="true">MRK / VENTURES / OBJECTS / FORM / FUNCTION</div>
     </section>
   );
 }

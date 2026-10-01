@@ -28,3 +28,6 @@ NEXT_PUBLIC_STORE_TAGLINE=Your tagline
 Import the repository directly into Vercel. No custom Root Directory is required because the Next.js app is at the repository root.
 
 For another store, duplicate this repository, change the Shopify credentials and branding variables, then deploy it as a separate Vercel project.
+
+
+<!-- Deployment status trigger -->

@@ -58,7 +58,7 @@ export default function PremiumHeader({ storeName }: { storeName: string }) {
           {categories.slice(0, 5).map((category) => (
             <a key={category} href={"#cat-" + encodeURIComponent(category)} onClick={() => setOpen(false)}>{category} <ArrowRight size={18}/></a>
           ))}
-          <div className="mobileMenuMeta"><span>{storeName}</span><span>Curated modern utility.</span></div>
+          <div className="mobileMenuMeta"><span>{storeName}</span><span>Curated essentials. Built for everyday life.</span></div>
         </div>
       </div>
     </>

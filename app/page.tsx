@@ -59,22 +59,14 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="typeStage shell" aria-label="MRK Ventures design statement">
-        <div className="typeStageRule"><span>FORM</span><span>FUNCTION</span><span>DETAIL</span></div>
-        <div className="typeStageMain">
-          <span className="typeStageGhost">MRK</span>
-          <div className="typeStageCopy">
-            <span className="eyebrow">THE MRK STANDARD</span>
-            <h2><span>Quiet luxury.</span><em>Real utility.</em></h2>
-            <p>Simple products. Clear purpose. Better everyday choices without the clutter.</p>
-          </div>
-          <div className="kineticObject" aria-hidden="true">
-            <div className="kineticOrb"/>
-            <div className="kineticRing ringOne"/>
-            <div className="kineticRing ringTwo"/>
-            <div className="kineticAxis"/>
-          </div>
+      <section className="standardStrip shell" aria-label="MRK Ventures shopping standard">
+        <div>
+          <span className="eyebrow">THE MRK STANDARD</span>
+          <strong>Useful products, clearly chosen.</strong>
         </div>
+        <div><span>01</span><p>Curated range<br/><small>Less clutter, easier choices.</small></p></div>
+        <div><span>02</span><p>Secure checkout<br/><small>Shopify-powered payments.</small></p></div>
+        <div><span>03</span><p>UK delivery<br/><small>Tracked fulfilment updates.</small></p></div>
       </section>
 
       <section className="shop shell" id="shop">
@@ -148,7 +140,7 @@ export default async function Home() {
         </h2>
         <div className="manifestoBottom">
           <p>Clear categories, straightforward product choices and a secure checkout from start to finish.</p>
-          <a href="#shop">Explore the collection <ArrowRight size={15}/></a>
+          <a href="#shop">Shop all products <ArrowRight size={15}/></a>
         </div>
       </section>
 

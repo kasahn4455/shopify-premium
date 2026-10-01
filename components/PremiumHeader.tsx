@@ -25,9 +25,8 @@ export default function PremiumHeader({ storeName }: { storeName: string }) {
     <>
       <header className={scrolled ? "siteHeader shell isScrolled" : "siteHeader shell"}>
         <div className="headerMainRow">
-          <Link href="/" className="brandMark" aria-label={storeName}>
-            <span className="brandMonogram">RV</span>
-            <span className="brandWords">{storeName}</span>
+          <Link href="/" className="brandMark mrkBrand" aria-label={storeName}>
+            <img className="brandLogo" src="/mrk-logo.svg" alt={storeName}/>
           </Link>
           <nav className="navLinks" aria-label="Primary navigation">
             <a href="#shop">Shop</a>

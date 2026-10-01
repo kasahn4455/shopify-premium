@@ -8,6 +8,8 @@ export type Product = {
   handle: string;
   title: string;
   description: string;
+  productType?: string;
+  vendor?: string;
   featuredImage?: ProductImage;
   images?: ProductImage[];
   variants: {
@@ -32,6 +34,8 @@ type AjaxProduct = {
   handle: string;
   title: string;
   body_html?: string;
+  product_type?: string;
+  vendor?: string;
   image?: AjaxImage;
   featured_image?: string;
   images?: AjaxImage[];
@@ -64,6 +68,8 @@ function normalize(product: AjaxProduct): Product {
     handle: product.handle,
     title: product.title,
     description: (product.body_html || "").replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim(),
+    productType: product.product_type || "Essentials",
+    vendor: product.vendor || undefined,
     featuredImage: featured,
     images: allImages.length ? allImages : featured ? [featured] : [],
     variants: {
@@ -109,7 +115,7 @@ export async function shopifyFetch<T>(query: string, variables: Record<string, u
 export async function getProducts(first = 12) {
   if (!token) return publicProducts(first);
   const data = await shopifyFetch<{ products: { edges: Array<{ node: StorefrontProduct }> } }>(
-    "query Products($first: Int!) { products(first: $first, sortKey: BEST_SELLING) { edges { node { id handle title description featuredImage { url altText } images(first: 6) { edges { node { url altText } } } variants(first: 10) { edges { node { id title availableForSale price { amount currencyCode } } } } } } } }",
+    "query Products($first: Int!) { products(first: $first, sortKey: BEST_SELLING) { edges { node { id handle title description productType vendor featuredImage { url altText } images(first: 6) { edges { node { url altText } } } variants(first: 10) { edges { node { id title availableForSale price { amount currencyCode } } } } } } } }",
     { first }
   );
   return data.products.edges.map(({ node }) => ({ ...node, images: node.images.edges.map(edge => edge.node) })) as Product[];
@@ -118,7 +124,7 @@ export async function getProducts(first = 12) {
 export async function getProduct(handle: string) {
   if (!token) return publicProduct(handle);
   const data = await shopifyFetch<{ product: StorefrontProduct | null }>(
-    "query Product($handle: String!) { product(handle: $handle) { id handle title description featuredImage { url altText } images(first: 8) { edges { node { url altText } } } variants(first: 25) { edges { node { id title availableForSale price { amount currencyCode } } } } } }",
+    "query Product($handle: String!) { product(handle: $handle) { id handle title description productType vendor featuredImage { url altText } images(first: 8) { edges { node { url altText } } } variants(first: 25) { edges { node { id title availableForSale price { amount currencyCode } } } } } }",
     { handle }
   );
   if (!data.product) return null;

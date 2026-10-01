@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
-const storeName = process.env.NEXT_PUBLIC_STORE_NAME || "Maison";
+const storeName = process.env.NEXT_PUBLIC_STORE_NAME || "Raheem Ventures";
 
 export const metadata: Metadata = {
   title: { default: storeName, template: `%s | ${storeName}` },

@@ -155,7 +155,7 @@ export default async function Home() {
       <footer className="footer shell">
         <div className="footerBrand">
           <img className="brandLogo footerLogo" src="/mrk-logo.svg" alt="MRK Ventures"/>
-          <strong>{storeName}</strong>
+          <span>Curated essentials for everyday life.</span>
         </div>
         <div className="footerLinks">
           <a href="#shop">Shop</a>

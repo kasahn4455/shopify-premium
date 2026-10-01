@@ -3,7 +3,13 @@ import { shopifyFetch } from "@/lib/shopify";
 
 export async function POST(request: NextRequest) {
   try {
-    const { merchandiseId, quantity = 1 } = await request.json();
+    const body = await request.json();
+    const merchandiseId = typeof body?.merchandiseId === "string" ? body.merchandiseId : "";
+    const quantity = Number.isInteger(body?.quantity) ? Math.max(1, Math.min(20, body.quantity)) : 1;
+
+    if (!merchandiseId) {
+      return NextResponse.json({ error: "A valid product option is required." }, { status: 400 });
+    }
 
     const data = await shopifyFetch<{
       cartCreate: {
@@ -24,10 +30,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: data.cartCreate.userErrors[0].message }, { status: 400 });
     }
 
-    return NextResponse.json({ checkoutUrl: data.cartCreate.cart?.checkoutUrl });
+    const checkoutUrl = data.cartCreate.cart?.checkoutUrl;
+    if (!checkoutUrl) {
+      return NextResponse.json({ error: "Checkout could not be created. Please try again." }, { status: 502 });
+    }
+
+    return NextResponse.json({ checkoutUrl });
   } catch (error) {
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Unable to create cart" },
+      { error: error instanceof Error ? error.message : "Unable to create checkout" },
       { status: 500 }
     );
   }

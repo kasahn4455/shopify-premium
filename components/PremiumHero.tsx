@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowDownRight, ArrowRight, ShieldCheck, Sparkles, Truck } from "lucide-react";
 
 type HeroProduct = {
@@ -81,7 +82,7 @@ export default function PremiumHero({ products }: { products: HeroProduct[] }) {
           <div className="heroObject heroObjectMain">
             <div className="heroObjectFrame">
               {lead?.image ? (
-                <img src={lead.image} alt={lead.title} />
+                <Image src={lead.image} alt={lead.title} fill priority sizes="(max-width: 900px) 80vw, 42vw" />
               ) : (
                 <div className="objectPlaceholder">RV</div>
               )}
@@ -96,7 +97,7 @@ export default function PremiumHero({ products }: { products: HeroProduct[] }) {
           <div className="heroObject heroObjectSide">
             <div className="heroObjectFrame">
               {second?.image ? (
-                <img src={second.image} alt={second.title} />
+                <Image src={second.image} alt={second.title} fill sizes="(max-width: 900px) 50vw, 22vw" />
               ) : (
                 <div className="objectPlaceholder">RV</div>
               )}

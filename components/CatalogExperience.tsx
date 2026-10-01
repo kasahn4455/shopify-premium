@@ -5,7 +5,7 @@ import { ChevronDown, SlidersHorizontal } from "lucide-react";
 import TiltProductCard from "@/components/TiltProductCard";
 import type { Product } from "@/lib/shopify";
 
-const DEPARTMENTS = ["Home","Kitchen","Cleaning","Laundry","Car","Tech","Travel","Toys","Gifts","Everyday"] as const;
+const DEPARTMENTS = ["Home","Kitchen","Cleaning","Laundry","Car","Tech","Travel","Toys","Pets","Gifts"] as const;
 
 function money(product: Product) {
   const variant = product.variants.edges[0]?.node;
@@ -29,8 +29,8 @@ function matchesDepartment(product: Product, department: string) {
     case "Tech": return has("usb","rechargeable","phone","fan","mount");
     case "Travel": return has("portable","travel","car","neck fan","handheld");
     case "Toys": return has("toy","bunny","plush","fidget","sensory","cube");
-    case "Gifts": return has("gift","bunny","plush","fidget","fan");
-    case "Everyday": return true;
+    case "Pets": return has("pet","dog","cat","grooming","travel bowl","carrier","crate");
+    case "Gifts": return has("gift","bunny","plush","fidget","fan","toy","candle","stationery");
     default: return true;
   }
 }

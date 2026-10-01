@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 120" role="img" aria-labelledby="title desc">
+<title id="title">MRK Ventures</title><desc id="desc">MRK Ventures wordmark</desc>
+<rect width="520" height="120" fill="none"/>
+<g fill="#11110f">
+<path d="M18 92V28h13l24 35 24-35h13v64H77V52L55 83 33 52v40H18Z"/>
+<path d="M113 92V28h31c18 0 29 9 29 25 0 10-5 18-14 22l18 17h-20l-15-14h-14v14h-15Zm15-28h15c10 0 15-4 15-11s-5-11-15-11h-15v22Z"/>
+<path d="M194 92V28h15v27l26-27h19l-29 30 31 34h-20l-27-30v30h-15Z"/>
+</g>
+<line x1="279" y1="26" x2="279" y2="94" stroke="#11110f" stroke-width="1"/>
+<text x="306" y="57" font-family="Arial,Helvetica,sans-serif" font-size="20" letter-spacing="7" fill="#11110f">VENTURES</text>
+<text x="306" y="83" font-family="Arial,Helvetica,sans-serif" font-size="9" letter-spacing="4" fill="#6d685f">CURATED COMMERCE</text>
+</svg>

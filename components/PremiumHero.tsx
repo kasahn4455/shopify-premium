@@ -10,18 +10,14 @@ export default function PremiumHero({ products }: { products: HeroProduct[] }) {
 
   return (
     <section className="kismaHero">
-      {lead?.image ? (
-        <Image
-          src={lead.image}
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-          className="kismaHeroImage"
-        />
-      ) : (
-        <div className="kismaHeroFallback" />
-      )}
+      <Image
+        src="/lifestyle/mrk-hero.webp"
+        alt="Bright premium everyday lifestyle workspace"
+        fill
+        priority
+        sizes="100vw"
+        className="kismaHeroImage"
+      />
       <div className="kismaHeroOverlay" />
 
       <div className="kismaHeroInner shell">

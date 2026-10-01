@@ -3,13 +3,13 @@ export const dynamic = "force-dynamic";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ShieldCheck, Sparkles, Truck } from "lucide-react";
-import { getProducts } from "@/lib/shopify";
+import { getProducts, type Product } from "@/lib/shopify";
 
 const storeName = process.env.NEXT_PUBLIC_STORE_NAME || "Raheem Ventures";
 const tagline = process.env.NEXT_PUBLIC_STORE_TAGLINE || "Quality products for everyday living.";
 
 export default async function Home() {
-  let products = [];
+  let products: Product[] = [];
   let setupError = false;
 
   try {

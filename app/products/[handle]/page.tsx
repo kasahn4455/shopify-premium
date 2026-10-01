@@ -73,9 +73,8 @@ export default async function ProductPage({ params }: PageProps) {
 
       <header className="productHeader">
         <Link href="/" className="backLink"><ArrowLeft size={15}/> Back to collection</Link>
-        <Link href="/" className="brandMark compactBrand">
-          <span className="brandMonogram">RV</span>
-          <span className="brandWords">MRK Ventures</span>
+        <Link href="/" className="brandMark compactBrand mrkBrand">
+          <img className="brandLogo compactLogo" src="/mrk-logo.svg" alt="MRK Ventures"/>
         </Link>
       </header>
 

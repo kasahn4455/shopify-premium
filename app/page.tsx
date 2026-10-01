@@ -1,9 +1,9 @@
 export const dynamic = "force-dynamic";
 
-import Image from "next/image";
-import Link from "next/link";
 import { ArrowRight, BadgeCheck, Headphones, RotateCcw, ShieldCheck, Truck } from "lucide-react";
 import PremiumHero from "@/components/PremiumHero";
+import PremiumHeader from "@/components/PremiumHeader";
+import TiltProductCard from "@/components/TiltProductCard";
 import { getProducts, type Product } from "@/lib/shopify";
 
 const storeName = process.env.NEXT_PUBLIC_STORE_NAME || "Raheem Ventures";
@@ -42,20 +42,7 @@ export default async function Home() {
         <span>Secure checkout powered by Shopify</span>
       </div>
 
-      <header className="siteHeader shell">
-        <Link href="/" className="brandMark" aria-label={storeName}>
-          <span className="brandMonogram">RV</span>
-          <span className="brandWords">{storeName}</span>
-        </Link>
-        <nav className="navLinks">
-          <a href="#shop">Collection</a>
-          <a href="#story">Our standard</a>
-          <a href="#service">Delivery & returns</a>
-        </nav>
-        <a href="#shop" className="navCta">
-          Shop now <ArrowRight size={14}/>
-        </a>
-      </header>
+      <PremiumHeader storeName={storeName} />
 
       <PremiumHero products={heroProducts} />
 
@@ -95,36 +82,17 @@ export default async function Home() {
             {products.map((product, index) => {
               const variant = product.variants.edges[0]?.node;
               return (
-                <Link
-                  className="productCard premiumCard"
-                  href={"/products/" + product.handle}
+                <TiltProductCard
                   key={product.id}
-                >
-                  <div className="productImage">
-                    <span className="productIndex">{String(index + 1).padStart(2, "0")}</span>
-                    {index < 2 && <span className="productBadge">FEATURED</span>}
-                    {product.featuredImage ? (
-                      <Image
-                        src={product.featuredImage.url}
-                        alt={product.featuredImage.altText || product.title}
-                        fill
-                        sizes="(max-width: 700px) 50vw, 25vw"
-                      />
-                    ) : (
-                      <div className="imageFallback">RV</div>
-                    )}
-                    <div className="productHoverAction">
-                      View product <ArrowRight size={15}/>
-                    </div>
-                  </div>
-                  <div className="productMeta">
-                    <div>
-                      <h3>{product.title}</h3>
-                      <span>{variant?.availableForSale ? "Ready to ship" : "Currently unavailable"}</span>
-                    </div>
-                    {variant && <strong>{money(product)}</strong>}
-                  </div>
-                </Link>
+                  index={index}
+                  handle={product.handle}
+                  title={product.title}
+                  image={product.featuredImage?.url}
+                  alt={product.featuredImage?.altText}
+                  price={variant ? money(product) : undefined}
+                  available={Boolean(variant?.availableForSale)}
+                  featured={index < 2}
+                />
               );
             })}
           </div>

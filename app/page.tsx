@@ -2,11 +2,20 @@ export const dynamic = "force-dynamic";
 
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, ShieldCheck, Sparkles, Truck } from "lucide-react";
+import { ArrowRight, BadgeCheck, Headphones, RotateCcw, ShieldCheck, Truck } from "lucide-react";
+import PremiumHero from "@/components/PremiumHero";
 import { getProducts, type Product } from "@/lib/shopify";
 
 const storeName = process.env.NEXT_PUBLIC_STORE_NAME || "Raheem Ventures";
-const tagline = process.env.NEXT_PUBLIC_STORE_TAGLINE || "Quality products for everyday living.";
+
+function money(product: Product) {
+  const variant = product.variants.edges[0]?.node;
+  if (!variant) return "";
+  return new Intl.NumberFormat("en-GB", {
+    style: "currency",
+    currency: variant.price.currencyCode
+  }).format(Number(variant.price.amount));
+}
 
 export default async function Home() {
   let products: Product[] = [];
@@ -18,78 +27,102 @@ export default async function Home() {
     setupError = true;
   }
 
+  const heroProducts = products.slice(0, 2).map(product => ({
+    title: product.title,
+    image: product.featuredImage?.url,
+    price: money(product),
+    handle: product.handle
+  }));
+
   return (
     <main>
-      <div className="announcement">Complimentary UK delivery on qualifying orders</div>
+      <div className="announcement">
+        <span>Complimentary UK delivery on qualifying orders</span>
+        <span className="announcementDot">•</span>
+        <span>Secure checkout powered by Shopify</span>
+      </div>
 
-      <header className="nav shell">
-        <Link href="/" className="brand">{storeName}</Link>
+      <header className="siteHeader shell">
+        <Link href="/" className="brandMark" aria-label={storeName}>
+          <span className="brandMonogram">RV</span>
+          <span className="brandWords">{storeName}</span>
+        </Link>
         <nav className="navLinks">
-          <a href="#shop">Shop</a>
-          <a href="#story">Our story</a>
-          <a href="#service">Service</a>
+          <a href="#shop">Collection</a>
+          <a href="#story">Our standard</a>
+          <a href="#service">Delivery & returns</a>
         </nav>
-        <a className="navCta" href="#shop">Explore</a>
+        <a href="#shop" className="navCta">
+          Shop now <ArrowRight size={14}/>
+        </a>
       </header>
 
-      <section className="hero shell">
-        <div className="heroCopy">
-          <span className="eyebrow">CURATED · DISTINCTIVE · USEFUL</span>
-          <h1>Objects worth <em>keeping.</em></h1>
-          <p>{tagline} A premium storefront built for clarity, trust and conversion.</p>
-          <a href="#shop" className="primaryButton">
-            Shop the collection <ArrowRight size={18} />
-          </a>
-        </div>
-        <div className="heroVisual">
-          <div className="orb orbA" />
-          <div className="orb orbB" />
-          <div className="heroCard">
-            <span>NEW EDIT</span>
-            <strong>Modern essentials.<br/>Quietly premium.</strong>
-          </div>
-        </div>
-      </section>
+      <PremiumHero products={heroProducts} />
 
-      <section className="trust shell" id="service">
-        <div><Truck size={20}/><span><strong>Fast delivery</strong><small>Tracked fulfilment</small></span></div>
-        <div><ShieldCheck size={20}/><span><strong>Secure checkout</strong><small>Powered by Shopify</small></span></div>
-        <div><Sparkles size={20}/><span><strong>Curated selection</strong><small>Quality over clutter</small></span></div>
+      <section className="marquee" aria-label="Raheem Ventures values">
+        <div className="marqueeTrack">
+          <span>CURATED UTILITY</span><i>◆</i>
+          <span>MODERN FORM</span><i>◆</i>
+          <span>EVERYDAY FUNCTION</span><i>◆</i>
+          <span>CONSIDERED QUALITY</span><i>◆</i>
+          <span>CURATED UTILITY</span><i>◆</i>
+          <span>MODERN FORM</span><i>◆</i>
+          <span>EVERYDAY FUNCTION</span><i>◆</i>
+          <span>CONSIDERED QUALITY</span><i>◆</i>
+        </div>
       </section>
 
       <section className="shop shell" id="shop">
-        <div className="sectionHead">
-          <div><span className="eyebrow">THE COLLECTION</span><h2>Featured products</h2></div>
-          <span className="muted">Selected for everyday usefulness and design.</span>
+        <div className="sectionHead premiumHead">
+          <div>
+            <span className="eyebrow">THE EDIT</span>
+            <h2>Selected, not saturated.</h2>
+          </div>
+          <div className="sectionIntro">
+            <p>A focused collection of useful products chosen to look good, work well and earn their place in your home.</p>
+            <span>{String(products.length).padStart(2, "0")} PRODUCTS</span>
+          </div>
         </div>
 
         {setupError ? (
           <div className="setupCard">
-            <strong>Connect Shopify to load live products.</strong>
-            <p>Add <code>SHOPIFY_STORE_DOMAIN</code> and <code>SHOPIFY_STOREFRONT_ACCESS_TOKEN</code> in Vercel environment variables.</p>
+            <span className="eyebrow">STORE CONNECTION</span>
+            <strong>Shopify products are temporarily unavailable.</strong>
+            <p>The storefront itself is live. Product inventory will appear automatically when the Shopify public catalogue is reachable.</p>
           </div>
         ) : (
-          <div className="productGrid">
-            {products.map((product: any) => {
+          <div className="productGrid premiumGrid">
+            {products.map((product, index) => {
               const variant = product.variants.edges[0]?.node;
               return (
-                <Link className="productCard" href={`/products/${product.handle}`} key={product.id}>
+                <Link
+                  className="productCard premiumCard"
+                  href={"/products/" + product.handle}
+                  key={product.id}
+                >
                   <div className="productImage">
-                    {product.featuredImage && (
+                    <span className="productIndex">{String(index + 1).padStart(2, "0")}</span>
+                    {index < 2 && <span className="productBadge">FEATURED</span>}
+                    {product.featuredImage ? (
                       <Image
                         src={product.featuredImage.url}
                         alt={product.featuredImage.altText || product.title}
                         fill
                         sizes="(max-width: 700px) 50vw, 25vw"
                       />
+                    ) : (
+                      <div className="imageFallback">RV</div>
                     )}
+                    <div className="productHoverAction">
+                      View product <ArrowRight size={15}/>
+                    </div>
                   </div>
                   <div className="productMeta">
                     <div>
                       <h3>{product.title}</h3>
-                      <span>View details</span>
+                      <span>{variant?.availableForSale ? "Ready to ship" : "Currently unavailable"}</span>
                     </div>
-                    {variant && <strong>{new Intl.NumberFormat("en-GB", { style: "currency", currency: variant.price.currencyCode }).format(Number(variant.price.amount))}</strong>}
+                    {variant && <strong>{money(product)}</strong>}
                   </div>
                 </Link>
               );
@@ -98,15 +131,69 @@ export default async function Home() {
         )}
       </section>
 
-      <section className="story shell" id="story">
-        <span className="eyebrow">WHY THIS STORE</span>
-        <h2>Less marketplace noise.<br/>More confidence to buy.</h2>
-        <p>A restrained layout, strong typography, generous spacing and clear product hierarchy keep the attention on what matters: the product and the decision.</p>
+      <section className="editorialBreak shell" id="story">
+        <div className="editorialNumber">01</div>
+        <div className="editorialCopy">
+          <span className="eyebrow">OUR STANDARD</span>
+          <h2>Useful first.<br/><em>Beautiful by default.</em></h2>
+          <p>
+            We favour pieces that solve a real problem without adding visual noise. The result is a tighter collection with a clearer reason to exist.
+          </p>
+        </div>
+        <div className="editorialSculpture" aria-hidden="true">
+          <div className="sculptureRing ringA"/>
+          <div className="sculptureRing ringB"/>
+          <div className="sculptureCore">RV</div>
+        </div>
+      </section>
+
+      <section className="serviceBand" id="service">
+        <div className="shell serviceGrid">
+          <div className="serviceItem">
+            <Truck size={22}/>
+            <div><strong>Tracked UK delivery</strong><span>Clear fulfilment from checkout to door.</span></div>
+          </div>
+          <div className="serviceItem">
+            <ShieldCheck size={22}/>
+            <div><strong>Secure checkout</strong><span>Payments handled through Shopify.</span></div>
+          </div>
+          <div className="serviceItem">
+            <RotateCcw size={22}/>
+            <div><strong>Simple returns</strong><span>Clear post-purchase support when needed.</span></div>
+          </div>
+          <div className="serviceItem">
+            <Headphones size={22}/>
+            <div><strong>Human support</strong><span>Real help for product and order questions.</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section className="manifesto shell">
+        <div className="manifestoTop">
+          <span>RAHEEM VENTURES / 2026</span>
+          <BadgeCheck size={22}/>
+        </div>
+        <h2>
+          A better store is not more crowded.
+          <span> It is more considered.</span>
+        </h2>
+        <div className="manifestoBottom">
+          <p>Quality, clarity and confidence — from first scroll to final checkout.</p>
+          <a href="#shop">Explore the collection <ArrowRight size={15}/></a>
+        </div>
       </section>
 
       <footer className="footer shell">
-        <strong>{storeName}</strong>
-        <span>© {new Date().getFullYear()} · Built on Shopify + Vercel</span>
+        <div className="footerBrand">
+          <span className="brandMonogram">RV</span>
+          <strong>{storeName}</strong>
+        </div>
+        <div className="footerLinks">
+          <a href="#shop">Shop</a>
+          <a href="#story">Our standard</a>
+          <a href="#service">Service</a>
+        </div>
+        <span>© {new Date().getFullYear()} {storeName}. Shopify-powered commerce.</span>
       </footer>
     </main>
   );

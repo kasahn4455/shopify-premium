@@ -3,8 +3,8 @@ import Link from "next/link";
 import { ArrowRight, ShieldCheck, Sparkles, Truck } from "lucide-react";
 import { getProducts } from "@/lib/shopify";
 
-const storeName = process.env.NEXT_PUBLIC_STORE_NAME || "Maison";
-const tagline = process.env.NEXT_PUBLIC_STORE_TAGLINE || "Elevated everyday essentials.";
+const storeName = process.env.NEXT_PUBLIC_STORE_NAME || "Raheem Ventures";
+const tagline = process.env.NEXT_PUBLIC_STORE_TAGLINE || "Quality products for everyday living.";
 
 export default async function Home() {
   let products = [];

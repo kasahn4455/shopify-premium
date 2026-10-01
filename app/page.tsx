@@ -58,7 +58,13 @@ export default async function Home() {
     setupError = true;
   }
 
-  const heroProducts = products.slice(0, 3).map(product => ({
+  const heroSelection = [
+    findBy(products, ["anodized aluminum desk organizer","desk organizer"], 0),
+    findBy(products, ["smart fashion backpack","backpack"], 1),
+    findBy(products, ["wireless charging car mount","charging car mount"], 2)
+  ].filter(Boolean) as Product[];
+
+  const heroProducts = heroSelection.map(product => ({
     title: product.title,
     image: product.featuredImage?.url,
     price: money(product),
@@ -66,10 +72,10 @@ export default async function Home() {
   }));
 
   const categories = [
-    { title: "Home & Living", terms: ["home","lamp","clock","decor","plant","household"] },
-    { title: "Tech & Accessories", terms: ["usb","phone","charger","fan","tech"] },
-    { title: "Car Accessories", terms: ["car","vacuum","dashboard","mount"] },
-    { title: "Everyday Essentials", terms: ["soap","bottle","clean","travel","everyday"] }
+    { title: "Home & Living", terms: ["desk organizer","lamp","clock","decor","home"] },
+    { title: "Tech & Accessories", terms: ["projector","usb adapter","phone case","charger"] },
+    { title: "Car Accessories", terms: ["wireless charging car mount","console organizer","car"] },
+    { title: "Everyday Essentials", terms: ["backpack","travel bowl","grooming brush","everyday"] }
   ].map((category, index) => ({
     ...category,
     product: findBy(products, category.terms, index)
@@ -77,7 +83,7 @@ export default async function Home() {
 
   const featured = products.slice(0, 10);
   const newArrivals = products.slice(10, 20).length ? products.slice(10, 20) : products.slice(0, 10);
-  const promo = findBy(products, ["car","vacuum","travel","portable"], 4);
+  const promo = findBy(products, ["4k resolution projector","projector","smart fashion backpack"], 4);
 
   return (
     <main className="kismaInspired">

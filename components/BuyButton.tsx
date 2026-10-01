@@ -2,12 +2,26 @@
 
 import { useState } from "react";
 
-export default function BuyButton({ merchandiseId, disabled = false }: { merchandiseId: string; disabled?: boolean }) {
+export default function BuyButton({
+  merchandiseId,
+  shopDomain,
+  disabled = false
+}: {
+  merchandiseId: string;
+  shopDomain: string;
+  disabled?: boolean;
+}) {
   const [loading, setLoading] = useState(false);
 
   async function checkout() {
     try {
       setLoading(true);
+
+      if (/^\d+$/.test(merchandiseId)) {
+        window.location.href = "https://" + shopDomain + "/cart/" + merchandiseId + ":1";
+        return;
+      }
+
       const res = await fetch("/api/cart", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

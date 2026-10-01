@@ -72,14 +72,11 @@ export default async function Home() {
   }));
 
   const categories = [
-    { title: "Home & Living", terms: ["desk organizer","lamp","clock","decor","home"] },
-    { title: "Tech & Accessories", terms: ["projector","usb adapter","phone case","charger"] },
-    { title: "Car Accessories", terms: ["wireless charging car mount","console organizer","car"] },
-    { title: "Everyday Essentials", terms: ["backpack","travel bowl","grooming brush","everyday"] }
-  ].map((category, index) => ({
-    ...category,
-    product: findBy(products, category.terms, index)
-  }));
+    { title: "Home & Living", image: "/lifestyle/mrk-home.webp", alt: "Bright premium home and living lifestyle scene" },
+    { title: "Tech & Accessories", image: "/lifestyle/mrk-tech.webp", alt: "Bright premium tech and accessories workspace" },
+    { title: "Car Accessories", image: "/lifestyle/mrk-car.webp", alt: "Bright premium car accessories lifestyle scene" },
+    { title: "Everyday Essentials", image: "/lifestyle/mrk-everyday.webp", alt: "Bright premium everyday essentials lifestyle scene" }
+  ];
 
   const featured = products.slice(0, 10);
   const newArrivals = products.slice(10, 20).length ? products.slice(10, 20) : products.slice(0, 10);
@@ -104,14 +101,12 @@ export default async function Home() {
           {categories.map((category, index) => (
             <a href="#shop" className="kismaCategoryCard" key={category.title}>
               <div className="kismaCategoryImage">
-                {category.product?.featuredImage ? (
-                  <Image
-                    src={category.product.featuredImage.url}
-                    alt={category.product.featuredImage.altText || category.title}
-                    fill
-                    sizes="(max-width: 760px) 70vw, 25vw"
-                  />
-                ) : <div className="imageFallback">MRK</div>}
+                <Image
+                  src={category.image}
+                  alt={category.alt}
+                  fill
+                  sizes="(max-width: 760px) 70vw, 25vw"
+                />
                 <span className="kismaCategoryIndex">0{index + 1}</span>
               </div>
               <div className="kismaCategoryMeta">
@@ -139,24 +134,22 @@ export default async function Home() {
         )}
       </section>
 
-      {promo?.featuredImage && (
-        <section className="kismaPromo shell">
-          <div className="kismaPromoImage">
-            <Image
-              src={promo.featuredImage.url}
-              alt={promo.featuredImage.altText || promo.title}
-              fill
-              sizes="100vw"
-            />
-            <div className="kismaPromoOverlay"/>
-            <div className="kismaPromoCopy">
-              <span>MRK EDIT / EVERYDAY UTILITY</span>
-              <h2>Useful products, thoughtfully selected.</h2>
-              <a href={"/products/" + promo.handle}>Explore the product <ArrowRight size={15}/></a>
-            </div>
+      <section className="kismaPromo shell">
+        <div className="kismaPromoImage">
+          <Image
+            src="/lifestyle/mrk-promo.webp"
+            alt="Bright premium lifestyle scene with modern everyday essentials"
+            fill
+            sizes="100vw"
+          />
+          <div className="kismaPromoOverlay"/>
+          <div className="kismaPromoCopy">
+            <span>MRK EDIT / EVERYDAY UTILITY</span>
+            <h2>Useful products, thoughtfully selected.</h2>
+            <a href={promo ? "/products/" + promo.handle : "#shop"}>Explore the edit <ArrowRight size={15}/></a>
           </div>
-        </section>
-      )}
+        </div>
+      </section>
 
       <section className="kismaProducts shell" id="new">
         <div className="kismaSectionHead">

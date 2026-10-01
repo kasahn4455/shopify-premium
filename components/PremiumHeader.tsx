@@ -5,7 +5,7 @@ import Link from "next/link";
 import { ArrowRight, Menu, X } from "lucide-react";
 
 export default function PremiumHeader({ storeName }: { storeName: string }) {
-  const categories = ["Home","Kitchen","Cleaning","Laundry","Car","Tech","Travel","Toys","Gifts","Everyday"];
+  const categories = ["Home","Kitchen","Cleaning","Laundry","Car","Tech","Travel","Toys","Pets","Gifts"];
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 

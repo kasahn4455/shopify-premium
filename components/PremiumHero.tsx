@@ -1,43 +1,109 @@
-import Image from "next/image";
+"use client";
+
+import { useRef } from "react";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import Image from "next/image";
+import { ArrowDownRight, ArrowRight, ShieldCheck, Sparkles, Truck } from "lucide-react";
 
 type HeroProduct = { title: string; image?: string; price?: string; handle?: string };
 
 export default function PremiumHero({ products }: { products: HeroProduct[] }) {
+  const stage = useRef<HTMLDivElement>(null);
+
+  function move(e: React.MouseEvent<HTMLDivElement>) {
+    const el = stage.current;
+    if (!el || !window.matchMedia("(hover:hover)").matches) return;
+    const r = el.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width - 0.5;
+    const y = (e.clientY - r.top) / r.height - 0.5;
+    el.style.setProperty("--rx", String((-y * 6).toFixed(2)) + "deg");
+    el.style.setProperty("--ry", String((x * 8).toFixed(2)) + "deg");
+    el.style.setProperty("--mx", String((x * 24).toFixed(2)) + "px");
+    el.style.setProperty("--my", String((y * 18).toFixed(2)) + "px");
+    el.style.setProperty("--px", String(((x + .5) * 100).toFixed(1)) + "%");
+    el.style.setProperty("--py", String(((y + .5) * 100).toFixed(1)) + "%");
+  }
+
+  function reset() {
+    const el = stage.current;
+    if (!el) return;
+    ["--rx","--ry"].forEach((k) => el.style.setProperty(k, "0deg"));
+    ["--mx","--my"].forEach((k) => el.style.setProperty(k, "0px"));
+    el.style.setProperty("--px", "50%");
+    el.style.setProperty("--py", "50%");
+  }
+
   const lead = products[0];
   const second = products[1];
+
   return (
-    <section className="editorialHero shell">
-      <div className="editorialHeroMedia">
-        {lead?.image ? (
-          <Image src={lead.image} alt={lead.title} fill priority sizes="(max-width: 900px) 100vw, 70vw" />
-        ) : <div className="imageFallback">RV</div>}
-        <div className="editorialHeroShade" />
-        <div className="editorialHeroCaption">
-          <span>THE AUTUMN EDIT / 01</span>
-          <strong>{lead?.title || "Objects for everyday living"}</strong>
-          {lead?.price && <small>{lead.price}</small>}
+    <section className="heroCinematic shell">
+      <div className="heroCinematicCopy">
+        <div className="heroTopline">
+          <span>RAHEEM VENTURES / CURATED COMMERCE</span>
+          <span>UK / 2026</span>
+        </div>
+
+        <div className="kineticTitle" aria-label="Objects with presence">
+          <span className="titleLine titleLineOne">OBJECTS</span>
+          <span className="titleLine titleLineTwo"><em>WITH</em> PRESENCE.</span>
+        </div>
+
+        <div className="heroLowerGrid">
+          <p>Useful things, selected with an editorial eye. Designed to feel considered before you even touch them.</p>
+          <div className="heroActions">
+            <a href="#shop" className="primaryButton magneticButton">Explore collection <ArrowRight size={17}/></a>
+            <a href="#story" className="textButton">Discover the standard <ArrowDownRight size={17}/></a>
+          </div>
+        </div>
+
+        <div className="heroProof heroProofCinematic">
+          <span><Truck size={15}/> Tracked UK delivery</span>
+          <span><ShieldCheck size={15}/> Shopify secure checkout</span>
+          <span><Sparkles size={15}/> Curated selection</span>
         </div>
       </div>
 
-      <div className="editorialHeroCopy">
-        <span className="eyebrow">RAHEEM VENTURES</span>
-        <h1>Useful things.<br/><em>Beautifully chosen.</em></h1>
-        <p>A considered collection for the home: functional objects, calm materials and everyday pieces that earn their place.</p>
-        <div className="editorialHeroActions">
-          <a href="#shop" className="editorialPrimary">Shop the collection <ArrowRight size={15}/></a>
-          <a href="#story" className="editorialText">Our approach</a>
-        </div>
-        {second && (
-          <Link href={"/products/" + second.handle} className="secondaryFeature">
-            <div className="secondaryFeatureImage">
-              {second.image ? <Image src={second.image} alt={second.title} fill sizes="180px"/> : <div className="imageFallback">RV</div>}
+      <div className="cinematicStageWrap">
+        <div ref={stage} className="cinematicStage" onMouseMove={move} onMouseLeave={reset}>
+          <div className="stageLight" />
+          <div className="stageGrid" />
+
+          <div className="orbit orbitOuter"><span /></div>
+          <div className="orbit orbitInner"><span /></div>
+          <div className="glassDisc discOne" />
+          <div className="glassDisc discTwo" />
+          <div className="chromeSphere sphereOne" />
+          <div className="chromeSphere sphereTwo" />
+
+          <div className="productPlane planePrimary">
+            <div className="productPlaneImage">
+              {lead?.image ? <Image src={lead.image} alt={lead.title} fill priority sizes="(max-width: 900px) 80vw, 38vw"/> : <div className="objectPlaceholder">RV</div>}
             </div>
-            <div><span>Also selected</span><strong>{second.title}</strong><small>{second.price}</small></div>
-          </Link>
-        )}
+            <div className="planeCaption">
+              <span>01 / FEATURED OBJECT</span>
+              <strong>{lead?.title || "Modern utility, refined."}</strong>
+              {lead?.price && <small>{lead.price}</small>}
+            </div>
+          </div>
+
+          <div className="productPlane planeSecondary">
+            <div className="productPlaneImage">
+              {second?.image ? <Image src={second.image} alt={second.title} fill sizes="(max-width: 900px) 44vw, 20vw"/> : <div className="objectPlaceholder">RV</div>}
+            </div>
+            <div className="planeCaption mini">
+              <span>02 / SELECTED</span>
+              <strong>{second?.title || "Quietly distinctive."}</strong>
+            </div>
+          </div>
+
+          <div className="brandTotem" aria-hidden="true"><span>R</span><b>V</b><span>2026</span></div>
+
+          {lead?.handle && <Link href={"/products/" + lead.handle} className="stageLink cinematicLink">View featured object <ArrowRight size={14}/></Link>}
+        </div>
       </div>
+
+      <div className="heroVerticalType" aria-hidden="true">RAHEEM / VENTURES / OBJECTS / FORM / FUNCTION</div>
     </section>
   );
 }

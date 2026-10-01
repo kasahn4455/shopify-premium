@@ -59,6 +59,24 @@ export default async function Home() {
         </div>
       </section>
 
+      <section className="typeStage shell" aria-label="Raheem Ventures design statement">
+        <div className="typeStageRule"><span>FORM</span><span>FUNCTION</span><span>DETAIL</span></div>
+        <div className="typeStageMain">
+          <span className="typeStageGhost">RV</span>
+          <div className="typeStageCopy">
+            <span className="eyebrow">THE RAHEEM STANDARD</span>
+            <h2><span>Quiet luxury.</span><em>Real utility.</em></h2>
+            <p>Not louder. Not busier. Better proportioned, better considered, better to live with.</p>
+          </div>
+          <div className="kineticObject" aria-hidden="true">
+            <div className="kineticOrb"/>
+            <div className="kineticRing ringOne"/>
+            <div className="kineticRing ringTwo"/>
+            <div className="kineticAxis"/>
+          </div>
+        </div>
+      </section>
+
       <section className="shop shell" id="shop">
         <div className="sectionHead premiumHead">
           <div>

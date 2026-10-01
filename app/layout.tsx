@@ -1,8 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
-const storeName = process.env.NEXT_PUBLIC_STORE_NAME || "Raheem Ventures";
-const description = process.env.NEXT_PUBLIC_STORE_TAGLINE || "Curated modern utility for everyday living.";
+const storeName = "MRK Ventures";
+const description = "Curated essentials for home, tech, travel and everyday life.";
 
 export const metadata: Metadata = {
   title: { default: storeName, template: `%s | ${storeName}` },
